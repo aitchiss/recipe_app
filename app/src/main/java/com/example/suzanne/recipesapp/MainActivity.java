@@ -16,28 +16,34 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Recipe>> {
 
-    private static int RECIPES_LOADER_ID = 10;
-    private NetworkUtils mNetworkUtils;
+    private static final int RECIPES_LOADER_ID = 10;
+    private static final String RECIPES_PARCEL_KEY = "recipes";
     private ArrayList<Recipe> mRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mNetworkUtils = new NetworkUtils(this);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        loaderManager.initLoader(1, null, this);
+        Loader loader = loaderManager.getLoader(RECIPES_LOADER_ID);
+        if (loader == null){
+            loaderManager.initLoader(RECIPES_LOADER_ID, null, this);
+        } else {
+            loaderManager.restartLoader(RECIPES_LOADER_ID, null, this);
+        }
+
     }
 
-    public void showRecipeMasterFragment(ArrayList<Recipe> recipes){
+    public void showRecipeMasterFragment(){
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("recipes", mRecipes);
-        Log.d("show master frag", String.valueOf(mRecipes.size()));
+        bundle.putParcelableArrayList(RECIPES_PARCEL_KEY, mRecipes);
 
         MasterRecipeListFragment masterRecipeListFragment = new MasterRecipeListFragment();
         masterRecipeListFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().add(R.id.master_recipe_list_fragment, masterRecipeListFragment).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.master_recipe_list_fragment, masterRecipeListFragment)
+                .commitAllowingStateLoss();
     }
 
     @Override
@@ -69,10 +75,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<ArrayList<Recipe>> loader, ArrayList<Recipe> data) {
         if (data != null){
-
             mRecipes = data;
-            Log.d("on load finished", String.valueOf(data.size()));
-            showRecipeMasterFragment(mRecipes);
+            showRecipeMasterFragment();
         }
     }
 

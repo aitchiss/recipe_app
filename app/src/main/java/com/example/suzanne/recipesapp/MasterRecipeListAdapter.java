@@ -11,6 +11,7 @@ import com.example.suzanne.recipesapp.models.Recipe;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -37,7 +38,7 @@ public class MasterRecipeListAdapter extends RecyclerView.Adapter<MasterRecipeLi
 
     @Override
     public void onBindViewHolder(MasterRecipeListAdapter.MasterRecipeListAdapterViewHolder holder, int position) {
-        holder.textView.setText(mRecipeData.get(position).getName());
+        holder.recipeName.setText(mRecipeData.get(position).getName());
     }
 
     @Override
@@ -56,12 +57,10 @@ public class MasterRecipeListAdapter extends RecyclerView.Adapter<MasterRecipeLi
 
     class MasterRecipeListAdapterViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textView;
+        @BindView(R.id.tv_recipe_name) TextView recipeName;
 
         public MasterRecipeListAdapterViewHolder(View itemView) {
             super(itemView);
-
-            textView = (TextView) itemView.findViewById(R.id.tv_recipe_name) ;
             ButterKnife.bind(this, itemView);
         }
     }
