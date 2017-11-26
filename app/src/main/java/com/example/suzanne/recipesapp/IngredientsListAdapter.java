@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.suzanne.recipesapp.models.IngredientSpecification;
+import com.example.suzanne.recipesapp.models.MeasurementType;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +38,11 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
     @Override
     public void onBindViewHolder(IngredientsListAdapterViewHolder holder, int position) {
         String quantityString = String.valueOf(mIngredients[position].getQuantity());
+        Boolean addCupPlural = (mIngredients[position].getMeasure() == MeasurementType.CUP && mIngredients[position].getQuantity() > 1);
         String measure = mIngredients[position].getMeasure().toDisplayString().toLowerCase();
+        if (addCupPlural){
+            measure += "s";
+        }
         String ingredientName = mIngredients[position].getIngredient();
 
         holder.ingredientDescription.setText(quantityString + measure + " " + ingredientName);
