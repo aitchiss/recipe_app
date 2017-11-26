@@ -30,6 +30,9 @@ public class MasterRecipeDetailFragment extends Fragment {
     @BindView(R.id.ingredients_recycler_view)
     RecyclerView mIngredientsRecyclerView;
 
+    @BindView(R.id.step_desc_recycler_view)
+    RecyclerView mStepsRecyclerView;
+
     public MasterRecipeDetailFragment(){
 
     }
@@ -45,9 +48,14 @@ public class MasterRecipeDetailFragment extends Fragment {
             mRecipeNameTextView.setText(mRecipe.getName());
 
             IngredientsListAdapter ingredientsListAdapter = new IngredientsListAdapter(mRecipe.getIngredients());
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), 1, false);
-            mIngredientsRecyclerView.setLayoutManager(layoutManager);
+            RecyclerView.LayoutManager ingredientsLayoutManager = new LinearLayoutManager(getActivity(), 1, false);
+            mIngredientsRecyclerView.setLayoutManager(ingredientsLayoutManager);
             mIngredientsRecyclerView.setAdapter(ingredientsListAdapter);
+
+            RecyclerView.LayoutManager stepsLayoutManager = new LinearLayoutManager(getActivity(), 1, false);
+            mStepsRecyclerView.setLayoutManager(stepsLayoutManager);
+            StepDescriptionAdapter stepDescriptionAdapter = new StepDescriptionAdapter(mRecipe.getSteps());
+            mStepsRecyclerView.setAdapter(stepDescriptionAdapter);
 
         }
 
