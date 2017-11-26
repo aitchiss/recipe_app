@@ -34,4 +34,26 @@ public enum MeasurementType {
                 return UNIT;
         }
     }
+
+
+    public String toDisplayString(){
+        switch(this){
+            case CUP:
+                return " cup";
+            case TBLSP:
+                return " tblsp";
+            case TSP:
+                return " tsp";
+            case K:
+                return "kg";
+            case G:
+                return "g";
+            case OZ:
+                return "oz";
+            case UNIT:
+                return "";
+            default:
+                return "";
+        }
+    }
 }

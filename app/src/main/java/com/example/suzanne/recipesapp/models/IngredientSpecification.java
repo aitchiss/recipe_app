@@ -22,7 +22,7 @@ public class IngredientSpecification implements Parcelable {
 
     public IngredientSpecification(Parcel parcel){
         this.quantity = parcel.readInt();
-        this.measure = MeasurementType.valueOf(parcel.readString());
+        this.measure = MeasurementType.getType(parcel.readString());
         this.ingredient = parcel.readString();
     }
 
