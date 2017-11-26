@@ -56,6 +56,6 @@ public class IngredientSpecification implements Parcelable {
             return new IngredientSpecification(parcel);
         }
 
-        public IngredientSpecification[] newArray(int size) { return new IngredientSpecification[0]; }
+        public IngredientSpecification[] newArray(int size) { return new IngredientSpecification[size]; }
     };
 }

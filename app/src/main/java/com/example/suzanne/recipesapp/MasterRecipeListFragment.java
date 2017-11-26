@@ -26,6 +26,7 @@ public class MasterRecipeListFragment extends Fragment implements MasterRecipeLi
 
     MasterRecipeListAdapter masterRecipeListAdapter;
     private static final String RECIPES_PARCEL_KEY = "recipes";
+    private static final String RECIPE_ACTIVITY_EXTRA_KEY = "recipe";
     ArrayList<Recipe> mRecipes;
 
     @BindView(R.id.recipes_recycler_view)
@@ -59,6 +60,7 @@ public class MasterRecipeListFragment extends Fragment implements MasterRecipeLi
     @Override
     public void onClick(Recipe recipe) {
         Intent intent = new Intent(getActivity(), RecipeActivity.class);
+        intent.putExtra(RECIPE_ACTIVITY_EXTRA_KEY, recipe);
         startActivity(intent);
     }
 }

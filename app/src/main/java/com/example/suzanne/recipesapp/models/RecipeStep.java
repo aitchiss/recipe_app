@@ -71,6 +71,6 @@ public class RecipeStep implements Parcelable {
             return new RecipeStep(parcel);
         }
 
-        public RecipeStep[] newArray(int size){ return new RecipeStep[0]; }
+        public RecipeStep[] newArray(int size){ return new RecipeStep[size]; }
     };
 }
