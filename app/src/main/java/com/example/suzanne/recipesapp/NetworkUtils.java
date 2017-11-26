@@ -32,50 +32,7 @@ import okhttp3.Response;
 public class NetworkUtils {
 
     private static final String API_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
-//    private static ArrayList<Recipe> mRecipes = new ArrayList<>();
-//    private OkHttpClient mClient;
-//    private Context mContext;
 
-//    public NetworkUtils(Context context){
-//        mContext = context;
-////    }
-
-//    public ArrayList<Recipe> getRecipesFromApi(){
-//        if (mClient == null){
-//            mClient = new OkHttpClient();
-//        }
-//
-//        if (isOnlineOrConnecting(mContext)){
-//            Request request = new Request.Builder().url(API_URL).build();
-//            Call call = mClient.newCall(request);
-//
-//            call.enqueue(new Callback() {
-//                @Override
-//                public void onFailure(Call call, IOException e) {
-////                TODO - handle UI of a network error
-//                    Log.d("okhttp", "fail");
-//                }
-//
-//                @Override
-//                public void onResponse(Call call, Response response) throws IOException {
-//                    parseJsonResponse(response.body().string());
-//                }
-//            });
-//
-//        }
-//        Log.d("network utils", String.valueOf(mRecipes.size()));
-//        return mRecipes;
-//    }
-//
-//    private static void parseJsonResponse(String jsonResponse){
-//        try {
-//            mRecipes = RecipeJsonUtils.convertJsonToRecipes(jsonResponse);
-//            Log.d("network utils json", String.valueOf(mRecipes.size()));
-//        } catch (JSONException e){
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     public static URL buildUrl(){
 //        TODO - is this necessary?
