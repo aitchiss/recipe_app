@@ -23,12 +23,18 @@ import butterknife.ButterKnife;
 
 public class MasterRecipeListAdapter extends RecyclerView.Adapter<MasterRecipeListAdapter.MasterRecipeListAdapterViewHolder> {
 
+    public interface RecipeClickHandler{
+        void onClick(Recipe recipe);
+    }
+
     private ArrayList<Recipe> mRecipeData;
     private Context mContext;
+    private final RecipeClickHandler mClickHandler;
 
-    public MasterRecipeListAdapter(ArrayList<Recipe> recipes, Context context){
+    public MasterRecipeListAdapter(ArrayList<Recipe> recipes, Context context, RecipeClickHandler clickHandler){
         mRecipeData = recipes;
         mContext = context;
+        mClickHandler = clickHandler;
     }
 
     @Override
@@ -47,7 +53,7 @@ public class MasterRecipeListAdapter extends RecyclerView.Adapter<MasterRecipeLi
         holder.servingNumber.setText(String.valueOf(mRecipeData.get(position).getServings()));
 
         String imageLocation = mRecipeData.get(position).getImage();
-        
+
         if (imageLocation != null && !imageLocation.isEmpty()){
             Picasso.with(holder.recipeImage.getContext())
                     .load(imageLocation)
@@ -74,7 +80,7 @@ public class MasterRecipeListAdapter extends RecyclerView.Adapter<MasterRecipeLi
         notifyDataSetChanged();
     }
 
-    class MasterRecipeListAdapterViewHolder extends RecyclerView.ViewHolder {
+    class MasterRecipeListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tv_recipe_name) TextView recipeName;
         @BindView(R.id.tv_servings_number) TextView servingNumber;
@@ -83,6 +89,14 @@ public class MasterRecipeListAdapter extends RecyclerView.Adapter<MasterRecipeLi
         public MasterRecipeListAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Recipe selectedRecipe = mRecipeData.get(position);
+            mClickHandler.onClick(selectedRecipe);
         }
     }
 }
