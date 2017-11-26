@@ -2,6 +2,7 @@ package com.example.suzanne.recipesapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,16 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
 
     @Override
     public void onBindViewHolder(IngredientsListAdapterViewHolder holder, int position) {
-        String quantityString = String.valueOf(mIngredients[position].getQuantity());
+        String quantityString;
+        boolean quantityIsWholeNumber = doubleIsWholeNumber(mIngredients[position].getQuantity());
+        if (quantityIsWholeNumber){
+
+            quantityString = String.valueOf(Integer.valueOf((int) Math.round(mIngredients[position].getQuantity())));
+            Log.d("string", quantityString);
+        } else {
+            quantityString = String.valueOf(mIngredients[position].getQuantity());
+        }
+
         Boolean addCupPlural = (mIngredients[position].getMeasure() == MeasurementType.CUP && mIngredients[position].getQuantity() > 1);
         String measure = mIngredients[position].getMeasure().toDisplayString().toLowerCase();
         if (addCupPlural){
@@ -60,6 +70,14 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
     public void setIngredientsData(IngredientSpecification[] newIngredients){
         mIngredients = newIngredients;
         notifyDataSetChanged();
+    }
+
+    private boolean doubleIsWholeNumber(double number){
+        if (number % 1 == 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     class IngredientsListAdapterViewHolder extends RecyclerView.ViewHolder {

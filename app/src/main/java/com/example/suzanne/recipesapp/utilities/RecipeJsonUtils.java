@@ -68,7 +68,7 @@ public class RecipeJsonUtils {
         for (int i = 0; i < jsonIngredients.length(); i++){
             JSONObject jsonIngredientSpec = jsonIngredients.getJSONObject(i);
 
-            int quantity = jsonIngredientSpec.getInt(QUANTITY);
+            double quantity = jsonIngredientSpec.getDouble(QUANTITY);
             MeasurementType measurement = MeasurementType.getType(jsonIngredientSpec.getString(MEASURE));
             String ingredient = jsonIngredientSpec.getString(INGREDIENT);
 
