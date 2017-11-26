@@ -24,9 +24,6 @@ public class MasterRecipeDetailFragment extends Fragment {
     private static final String RECIPE_ACTIVITY_EXTRA_KEY = "recipe";
     private Recipe mRecipe;
 
-    @BindView(R.id.tv_recipe_name)
-    TextView mRecipeNameTextView;
-
     @BindView(R.id.ingredients_recycler_view)
     RecyclerView mIngredientsRecyclerView;
 
@@ -45,7 +42,6 @@ public class MasterRecipeDetailFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null){
             mRecipe = bundle.getParcelable(RECIPE_ACTIVITY_EXTRA_KEY);
-            mRecipeNameTextView.setText(mRecipe.getName());
 
             IngredientsListAdapter ingredientsListAdapter = new IngredientsListAdapter(mRecipe.getIngredients());
             RecyclerView.LayoutManager ingredientsLayoutManager = new LinearLayoutManager(getActivity(), 1, false);

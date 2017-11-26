@@ -26,5 +26,7 @@ public class RecipeActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.master_recipe_detail_container, recipeDetailFragment)
                 .commit();
+
+        getSupportActionBar().setTitle(mRecipe.getName());
     }
 }
