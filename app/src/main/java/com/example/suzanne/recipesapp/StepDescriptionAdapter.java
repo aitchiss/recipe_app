@@ -2,6 +2,7 @@ package com.example.suzanne.recipesapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,11 @@ import butterknife.ButterKnife;
 public class StepDescriptionAdapter extends RecyclerView.Adapter<StepDescriptionAdapter.StepDescriptionAdapterViewHolder> {
 
     private RecipeStep[] mSteps;
+    private final MasterRecipeDetailFragment.OnRecipeStepClickListener mClickHandler;
 
-    public StepDescriptionAdapter(RecipeStep[] steps){
+    public StepDescriptionAdapter(RecipeStep[] steps, MasterRecipeDetailFragment.OnRecipeStepClickListener clickListener){
         mSteps = steps;
+        mClickHandler = clickListener;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class StepDescriptionAdapter extends RecyclerView.Adapter<StepDescription
         }
     }
 
-    class StepDescriptionAdapterViewHolder extends RecyclerView.ViewHolder{
+    class StepDescriptionAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.tv_step_short_description)
         TextView stepDescription;
@@ -56,6 +59,13 @@ public class StepDescriptionAdapter extends RecyclerView.Adapter<StepDescription
         public StepDescriptionAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d("clicked", "in adapter");
+            mClickHandler.onRecipeStepClick(getAdapterPosition());
         }
     }
 }

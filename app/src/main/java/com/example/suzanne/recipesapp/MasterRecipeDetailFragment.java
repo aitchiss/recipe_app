@@ -1,16 +1,19 @@
 package com.example.suzanne.recipesapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.suzanne.recipesapp.models.Recipe;
+import com.example.suzanne.recipesapp.models.RecipeStep;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +26,11 @@ public class MasterRecipeDetailFragment extends Fragment {
 
     private static final String RECIPE_ACTIVITY_EXTRA_KEY = "recipe";
     private Recipe mRecipe;
+    private OnRecipeStepClickListener mRecipeStepClickListener;
+
+    public interface OnRecipeStepClickListener{
+        void onRecipeStepClick(int stepIndex);
+    }
 
     @BindView(R.id.ingredients_recycler_view)
     RecyclerView mIngredientsRecyclerView;
@@ -50,11 +58,22 @@ public class MasterRecipeDetailFragment extends Fragment {
 
             RecyclerView.LayoutManager stepsLayoutManager = new LinearLayoutManager(getActivity(), 1, false);
             mStepsRecyclerView.setLayoutManager(stepsLayoutManager);
-            StepDescriptionAdapter stepDescriptionAdapter = new StepDescriptionAdapter(mRecipe.getSteps());
+            StepDescriptionAdapter stepDescriptionAdapter = new StepDescriptionAdapter(mRecipe.getSteps(), mRecipeStepClickListener);
             mStepsRecyclerView.setAdapter(stepDescriptionAdapter);
 
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mRecipeStepClickListener = (OnRecipeStepClickListener) context;
+            Log.d("frag", "set handler");
+        } catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnRecipeStepClickListener");
+        }
     }
 }
