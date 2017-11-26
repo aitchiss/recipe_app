@@ -51,7 +51,7 @@ public class MasterRecipeListFragment extends Fragment {
             mRecipes = new ArrayList<Recipe>();
         }
 
-        masterRecipeListAdapter = new MasterRecipeListAdapter(mRecipes);
+        masterRecipeListAdapter = new MasterRecipeListAdapter(mRecipes, getActivity());
         mRecyclerView.setAdapter(masterRecipeListAdapter);
         return rootView;
 

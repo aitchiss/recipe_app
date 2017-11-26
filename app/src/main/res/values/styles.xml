@@ -8,4 +8,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RecipeCardsTitle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="RecipeCardsSubHeadings">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="RecipeCardsImage">
+        <item name="android:layout_height">75dp</item>
+        <item name="android:layout_width">75dp</item>
+    </style>
+
 </resources>
