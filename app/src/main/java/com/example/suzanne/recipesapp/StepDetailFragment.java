@@ -1,6 +1,7 @@
 package com.example.suzanne.recipesapp;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Optional;
 
 /**
  * Created by suzanne on 26/11/2017.
@@ -54,6 +56,8 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     private static final String FLAG_NEXT = "next";
     private static final String FLAG_PREVIOUS = "previous";
 
+    private int mCurrentOrientation;
+
     private RecipeStep mRecipeStep;
     private ExoPlayer mExoPlayer;
     private MediaSessionCompat mMediaSession;
@@ -65,19 +69,19 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         void onStepArrowClicked(String flag);
     }
 
-    @BindView(R.id.tv_step_description)
+    @Nullable @BindView(R.id.tv_step_description)
     TextView mStepDescription;
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView mPlayerView;
 
-    @BindView(R.id.iv_next_arrow)
+    @Nullable @BindView(R.id.iv_next_arrow)
     ImageView mNextArrow;
 
-    @BindView(R.id.iv_back_arrow) ImageView mBackArrow;
+    @Nullable @BindView(R.id.iv_back_arrow) ImageView mBackArrow;
 
-    @BindView(R.id.tv_next_label) TextView mNextLabel;
-    @BindView(R.id.tv_previous_label) TextView mPreviousLabel;
+    @Nullable @BindView(R.id.tv_next_label) TextView mNextLabel;
+    @Nullable @BindView(R.id.tv_previous_label) TextView mPreviousLabel;
     @BindView(R.id.iv_video_alt_image) ImageView mVideoPlaceholderImage;
     @BindView(R.id.layout_no_network)
     LinearLayout mNoNetworkLayout;
@@ -87,12 +91,16 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         ButterKnife.bind(this, rootView);
+        mCurrentOrientation = getResources().getConfiguration().orientation;
         initializeMediaSession();
         Bundle bundle = this.getArguments();
         if (bundle != null){
             mRecipeStep = bundle.getParcelable(RECIPE_STEP_DETAIL_KEY);
-            mStepDescription.setText(mRecipeStep.getDescription());
-            updateArrows(bundle);
+
+            if(mCurrentOrientation == Configuration.ORIENTATION_PORTRAIT){
+                mStepDescription.setText(mRecipeStep.getDescription());
+                updateArrows(bundle);
+            }
 
             if(NetworkUtils.isOnlineOrConnecting(getContext())){
                 mNoNetworkLayout.setVisibility(View.INVISIBLE);
