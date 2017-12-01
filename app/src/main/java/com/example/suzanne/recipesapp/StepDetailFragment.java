@@ -49,16 +49,18 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     private static final String MEDIA_SESSION_TAG = "recipeMediaSession";
     private static final String IS_LAST_STEP_KEY = "isLastStep";
     private static final String IS_FIRST_STEP_KEY = "isFirstStep";
+    private static final String FLAG_NEXT = "next";
+    private static final String FLAG_PREVIOUS = "previous";
 
     private RecipeStep mRecipeStep;
     private ExoPlayer mExoPlayer;
     private MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
 
-    private OnNextStepClickListener mNextClickListener;
+    private OnStepArrowClickListener mStepArrowClickListener;
 
-    public interface OnNextStepClickListener{
-        void onNextStepClicked(View view);
+    public interface OnStepArrowClickListener{
+        void onStepArrowClicked(String flag);
     }
 
     @BindView(R.id.tv_step_description)
@@ -70,7 +72,10 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     @BindView(R.id.iv_next_arrow)
     ImageView mNextArrow;
 
+    @BindView(R.id.iv_back_arrow) ImageView mBackArrow;
+
     @BindView(R.id.tv_next_label) TextView mNextLabel;
+    @BindView(R.id.tv_previous_label) TextView mPreviousLabel;
 
     @Nullable
     @Override
@@ -82,28 +87,43 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         if (bundle != null){
             mRecipeStep = bundle.getParcelable(RECIPE_STEP_DETAIL_KEY);
             mStepDescription.setText(mRecipeStep.getDescription());
-            mNextArrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mNextClickListener.onNextStepClicked(view);
-                }
-            });
-
-            if(bundle.getBoolean(IS_LAST_STEP_KEY)){
-                mNextArrow.setVisibility(View.INVISIBLE);
-                mNextLabel.setVisibility(View.INVISIBLE);
-            }
+            updateArrows(bundle);
             initializePlayer();
         }
 
         return rootView;
     }
 
+    private void updateArrows(Bundle bundle){
+        mNextArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mStepArrowClickListener.onStepArrowClicked(FLAG_NEXT);
+            }
+        });
+        mBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mStepArrowClickListener.onStepArrowClicked(FLAG_PREVIOUS);
+            }
+        });
+
+        if(bundle.getBoolean(IS_LAST_STEP_KEY)){
+            mNextArrow.setVisibility(View.INVISIBLE);
+            mNextLabel.setVisibility(View.INVISIBLE);
+        }
+
+        if(bundle.getBoolean(IS_FIRST_STEP_KEY)){
+            mBackArrow.setVisibility(View.INVISIBLE);
+            mPreviousLabel.setVisibility(View.INVISIBLE);
+        }
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mNextClickListener = (OnNextStepClickListener) context;
+            mStepArrowClickListener = (OnStepArrowClickListener) context;
         } catch (ClassCastException e){
             throw new ClassCastException(context.toString() + " must implement OnNextStepClickListener");
         }

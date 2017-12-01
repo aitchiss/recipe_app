@@ -7,13 +7,15 @@ import android.view.View;
 import com.example.suzanne.recipesapp.models.Recipe;
 import com.example.suzanne.recipesapp.models.RecipeStep;
 
-public class StepDetailActivity extends AppCompatActivity implements StepDetailFragment.OnNextStepClickListener {
+public class StepDetailActivity extends AppCompatActivity implements StepDetailFragment.OnStepArrowClickListener {
 
     private static final String CURRENT_RECIPE_KEY = "currentRecipe";
     private static final String CURRENT_RECIPE_STEP_KEY = "recipeStep";
     private static final String RECIPE_STEP_DETAIL_KEY = "recipeStepDetail";
     private static final String IS_LAST_STEP_KEY = "isLastStep";
     private static final String IS_FIRST_STEP_KEY = "isFirstStep";
+    private static final String FLAG_NEXT = "next";
+    private static final String FLAG_PREVIOUS = "previous";
 
     private Recipe mRecipe;
     private RecipeStep mRecipeStep;
@@ -56,28 +58,47 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
     }
 
     @Override
-    public void onNextStepClicked(View view) {
-// Only do something if we're not already on the last step
-        if (!isLastStep(mCurrentStepIndex)){
+    public void onStepArrowClicked(String flag) {
+        Bundle args = new Bundle();
+
+        if(FLAG_NEXT.equals(flag)){
+            // Only do something if we're not already on the last step
+            if (isLastStep(mCurrentStepIndex)){ return; }
+//            increment the step we're on and update the current step
             mCurrentStepIndex++;
             mRecipeStep = mRecipe.getSteps()[mCurrentStepIndex];
-
-            Bundle args = new Bundle();
+//           bundle up the recipe step needed, and whether or not next/back arrows should show
             args.putParcelable(RECIPE_STEP_DETAIL_KEY, mRecipeStep);
             args.putBoolean(IS_FIRST_STEP_KEY, false);
+            args.putBoolean(IS_LAST_STEP_KEY, isLastStep(mCurrentStepIndex));
 
-            if (isLastStep(mCurrentStepIndex)){
-                args.putBoolean(IS_LAST_STEP_KEY, true);
-            } else {
-                args.putBoolean(IS_LAST_STEP_KEY, false);
-            }
+//          Replace the fragment visible with the new one
+            replaceFragment(args);
 
-            StepDetailFragment stepDetailFragment = new StepDetailFragment();
-            stepDetailFragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.step_detail_fragment_container, stepDetailFragment)
-                    .commit();
+        } else if(FLAG_PREVIOUS.equals(flag)){
+//            Only do something if we're not on the first step
+            if (mCurrentStepIndex == 0){ return; }
+//            decrement the step index and update the current step
+            mCurrentStepIndex--;
+            mRecipeStep = mRecipe.getSteps()[mCurrentStepIndex];
+//            create the bundle
+            args.putParcelable(RECIPE_STEP_DETAIL_KEY, mRecipeStep);
+            boolean isFirstStep = (mCurrentStepIndex == 0);
+            args.putBoolean(IS_FIRST_STEP_KEY, isFirstStep );
+            args.putBoolean(IS_LAST_STEP_KEY, isLastStep(mCurrentStepIndex));
+
+            replaceFragment(args);
         }
+
+
+    }
+
+    private void replaceFragment(Bundle args){
+        StepDetailFragment stepDetailFragment = new StepDetailFragment();
+        stepDetailFragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.step_detail_fragment_container, stepDetailFragment)
+                .commit();
     }
 
     private boolean isLastStep(int index){
