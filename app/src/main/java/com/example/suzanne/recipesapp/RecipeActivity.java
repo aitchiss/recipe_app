@@ -15,6 +15,7 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
     private static final String CURRENT_RECIPE_STEP_KEY = "recipeStep";
     private Recipe mRecipe;
     private int mCurrentStepIndex;
+    private boolean mTwoPaneMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,15 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.master_recipe_detail_container, recipeDetailFragment)
                 .commit();
+
+        if(findViewById(R.id.recipe_horiztonal_layout) != null){
+            mTwoPaneMode = true;
+//            TODO - create the second fragment
+        } else {
+            mTwoPaneMode = false;
+        }
+
+
 
         getSupportActionBar().setTitle(mRecipe.getName());
     }
