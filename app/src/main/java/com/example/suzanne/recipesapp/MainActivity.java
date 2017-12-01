@@ -1,6 +1,7 @@
 package com.example.suzanne.recipesapp;
 
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final int RECIPES_LOADER_ID = 10;
     private static final String RECIPES_PARCEL_KEY = "recipes";
+    private static final String RECIPES_SHARED_PREF_KEY = "recipeList";
     private ArrayList<Recipe> mRecipes;
 
     @BindView(R.id.layout_main_activity_no_network)
@@ -38,6 +40,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        if (savedInstanceState != null && savedInstanceState.containsKey(RECIPES_SHARED_PREF_KEY)){
+            mRecipes = savedInstanceState.getParcelableArrayList(RECIPES_SHARED_PREF_KEY);
+            mFragmentContainer.setVisibility(View.VISIBLE);
+            mNoNetworkView.setVisibility(View.INVISIBLE);
+            showRecipeMasterFragment();
+        } else {
+            loadRecipes();
+        }
+    }
+
+    public void loadRecipes(){
         if (NetworkUtils.isOnlineOrConnecting(this)){
             mFragmentContainer.setVisibility(View.VISIBLE);
             mNoNetworkView.setVisibility(View.INVISIBLE);
@@ -63,6 +76,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.master_recipe_list_fragment, masterRecipeListFragment)
                 .commitAllowingStateLoss();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (mRecipes != null){
+            outState.putParcelableArrayList(RECIPES_SHARED_PREF_KEY, mRecipes);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
