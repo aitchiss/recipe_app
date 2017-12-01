@@ -48,12 +48,14 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
                 args.putBoolean(IS_LAST_STEP_KEY, false);
             }
 
+            if(savedInstanceState == null){
+                StepDetailFragment stepDetailFragment = new StepDetailFragment();
+                stepDetailFragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.step_detail_fragment_container, stepDetailFragment)
+                        .commit();
+            }
 
-            StepDetailFragment stepDetailFragment = new StepDetailFragment();
-            stepDetailFragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.step_detail_fragment_container, stepDetailFragment)
-                    .commit();
         }
     }
 

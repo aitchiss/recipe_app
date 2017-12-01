@@ -55,8 +55,10 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     private static final String IS_FIRST_STEP_KEY = "isFirstStep";
     private static final String FLAG_NEXT = "next";
     private static final String FLAG_PREVIOUS = "previous";
+    private static final String CURRENT_PLAYER_POSITION_KEY = "playerPosition";
 
     private int mCurrentOrientation;
+    private long mSavedVideoPosition;
 
     private RecipeStep mRecipeStep;
     private ExoPlayer mExoPlayer;
@@ -104,7 +106,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
             if(NetworkUtils.isOnlineOrConnecting(getContext())){
                 mNoNetworkLayout.setVisibility(View.INVISIBLE);
-                initializePlayer();
+                initializePlayer(savedInstanceState);
             } else {
                 mNoNetworkLayout.setVisibility(View.VISIBLE);
                 mVideoPlaceholderImage.setVisibility(View.INVISIBLE);
@@ -151,7 +153,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         }
     }
 
-    private void initializePlayer(){
+    private void initializePlayer(Bundle previousState){
 //        Check if there is a video URL to load, show thumbnail or placeholder if not
         if(mRecipeStep.getVideoUrl().isEmpty() || mRecipeStep.getVideoUrl() == null){
             mPlayerView.setVisibility(View.INVISIBLE);
@@ -180,6 +182,10 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
                 Uri uri = Uri.parse(mRecipeStep.getVideoUrl());
                 MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
                         getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+
+                if(previousState != null && previousState.containsKey(CURRENT_PLAYER_POSITION_KEY)){
+                    mExoPlayer.seekTo(previousState.getLong(CURRENT_PLAYER_POSITION_KEY));
+                }
                 mExoPlayer.prepare(mediaSource);
                 mExoPlayer.setPlayWhenReady(true);
                 mExoPlayer.addListener(this);
@@ -188,6 +194,11 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putLong(CURRENT_PLAYER_POSITION_KEY, mSavedVideoPosition);
+        super.onSaveInstanceState(outState);
+    }
 
     private void releasePlayer(){
         if (mExoPlayer != null){
@@ -213,13 +224,10 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         mMediaSession.setActive(true);
     }
 
-    private void onNextClick(View view){
-
-    }
-
     @Override
     public void onPause() {
         super.onPause();
+        mSavedVideoPosition = mExoPlayer.getCurrentPosition();
         releasePlayer();
         mMediaSession.setActive(false);
     }
