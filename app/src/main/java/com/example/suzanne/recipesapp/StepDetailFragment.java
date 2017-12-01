@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.suzanne.recipesapp.models.RecipeStep;
@@ -35,6 +36,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +78,9 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
     @BindView(R.id.tv_next_label) TextView mNextLabel;
     @BindView(R.id.tv_previous_label) TextView mPreviousLabel;
+    @BindView(R.id.iv_video_alt_image) ImageView mVideoPlaceholderImage;
+    @BindView(R.id.layout_no_network)
+    LinearLayout mNoNetworkLayout;
 
     @Nullable
     @Override
@@ -88,7 +93,16 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
             mRecipeStep = bundle.getParcelable(RECIPE_STEP_DETAIL_KEY);
             mStepDescription.setText(mRecipeStep.getDescription());
             updateArrows(bundle);
-            initializePlayer();
+
+            if(NetworkUtils.isOnlineOrConnecting(getContext())){
+                mNoNetworkLayout.setVisibility(View.INVISIBLE);
+                initializePlayer();
+            } else {
+                mNoNetworkLayout.setVisibility(View.VISIBLE);
+                mVideoPlaceholderImage.setVisibility(View.INVISIBLE);
+                mPlayerView.setVisibility(View.INVISIBLE);
+            }
+
         }
 
         return rootView;
@@ -130,27 +144,48 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     }
 
     private void initializePlayer(){
-        if (mExoPlayer == null){
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
-            mPlayerView.setPlayer((SimpleExoPlayer) mExoPlayer);
+        if(mRecipeStep.getVideoUrl().isEmpty() || mRecipeStep.getVideoUrl() == null){
+            mPlayerView.setVisibility(View.INVISIBLE);
+            mVideoPlaceholderImage.setVisibility(View.VISIBLE);
+//            Check if there is a thumbnail to display
+            if(!mRecipeStep.getThumbnailUrl().isEmpty() && mRecipeStep.getThumbnailUrl() != null){
+                Picasso.with(getActivity())
+                        .load(mRecipeStep.getThumbnailUrl())
+                        .placeholder(R.drawable.video_coming_soon)
+                        .error(R.drawable.video_coming_soon)
+                        .into(mVideoPlaceholderImage);
+            } else {
+                mVideoPlaceholderImage.setImageDrawable(getActivity().getDrawable(R.drawable.video_coming_soon));
+            }
 
-            String userAgent = Util.getUserAgent(getActivity(), "recipe app");
-            Uri uri = Uri.parse(mRecipeStep.getVideoUrl());
-            MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
-                    getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-            mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
-            mExoPlayer.addListener(this);
+        } else {
+            mPlayerView.setVisibility(View.VISIBLE);
+            mVideoPlaceholderImage.setVisibility(View.INVISIBLE);
+            if (mExoPlayer == null){
+                TrackSelector trackSelector = new DefaultTrackSelector();
+                LoadControl loadControl = new DefaultLoadControl();
+                mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+                mPlayerView.setPlayer((SimpleExoPlayer) mExoPlayer);
+
+                String userAgent = Util.getUserAgent(getActivity(), "recipe app");
+                Uri uri = Uri.parse(mRecipeStep.getVideoUrl());
+                MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
+                        getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+                mExoPlayer.prepare(mediaSource);
+                mExoPlayer.setPlayWhenReady(true);
+                mExoPlayer.addListener(this);
+            }
         }
+
     }
 
 
     private void releasePlayer(){
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if (mExoPlayer != null){
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     private void initializeMediaSession(){
