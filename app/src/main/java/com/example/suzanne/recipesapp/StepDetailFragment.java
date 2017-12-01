@@ -62,13 +62,14 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         ButterKnife.bind(this, rootView);
-
+        initializeMediaSession();
         Bundle bundle = this.getArguments();
         if (bundle != null){
             mRecipeStep = bundle.getParcelable(RECIPE_STEP_DETAIL_KEY);
             mStepDescription.setText(mRecipeStep.getDescription());
 
             initializePlayer();
+
         }
 
         return rootView;
@@ -119,6 +120,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     public void onPause() {
         super.onPause();
         releasePlayer();
+        mMediaSession.setActive(false);
     }
 
     @Override
@@ -139,10 +141,15 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         if((playbackState == Player.STATE_READY) && playWhenReady){
-            Log.d("exoplayer", "playing");
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
+                    mExoPlayer.getCurrentPosition(),
+                    1f);
         } else if (playbackState == Player.STATE_READY){
-            Log.d("exoplayer", "paused");
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                    mExoPlayer.getCurrentPosition(),
+                    1f);
         }
+        mMediaSession.setPlaybackState(mStateBuilder.build());
     }
 
     @Override
@@ -168,12 +175,12 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     private class MySessionCallback extends MediaSessionCompat.Callback{
         @Override
         public void onPlay() {
-            super.onPlay();
+            mExoPlayer.setPlayWhenReady(true);
         }
 
         @Override
         public void onPause() {
-            super.onPause();
+            mExoPlayer.setPlayWhenReady(false);
         }
     }
 }
