@@ -144,6 +144,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     }
 
     private void initializePlayer(){
+//        Check if there is a video URL to load, show thumbnail or placeholder if not
         if(mRecipeStep.getVideoUrl().isEmpty() || mRecipeStep.getVideoUrl() == null){
             mPlayerView.setVisibility(View.INVISIBLE);
             mVideoPlaceholderImage.setVisibility(View.VISIBLE);

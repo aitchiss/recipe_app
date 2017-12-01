@@ -7,6 +7,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.example.suzanne.recipesapp.models.Recipe;
 import com.example.suzanne.recipesapp.utilities.RecipeJsonUtils;
@@ -14,25 +17,41 @@ import com.example.suzanne.recipesapp.utilities.RecipeJsonUtils;
 import java.net.URL;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Recipe>> {
 
     private static final int RECIPES_LOADER_ID = 10;
     private static final String RECIPES_PARCEL_KEY = "recipes";
     private ArrayList<Recipe> mRecipes;
 
+    @BindView(R.id.layout_main_activity_no_network)
+    LinearLayout mNoNetworkView;
+
+    @BindView(R.id.master_recipe_list_fragment)
+    FrameLayout mFragmentContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        LoaderManager loaderManager = getSupportLoaderManager();
-        Loader loader = loaderManager.getLoader(RECIPES_LOADER_ID);
-        if (loader == null){
-            loaderManager.initLoader(RECIPES_LOADER_ID, null, this);
+        if (NetworkUtils.isOnlineOrConnecting(this)){
+            mFragmentContainer.setVisibility(View.VISIBLE);
+            mNoNetworkView.setVisibility(View.INVISIBLE);
+            LoaderManager loaderManager = getSupportLoaderManager();
+            Loader loader = loaderManager.getLoader(RECIPES_LOADER_ID);
+            if (loader == null){
+                loaderManager.initLoader(RECIPES_LOADER_ID, null, this);
+            } else {
+                loaderManager.restartLoader(RECIPES_LOADER_ID, null, this);
+            }
         } else {
-            loaderManager.restartLoader(RECIPES_LOADER_ID, null, this);
+            mFragmentContainer.setVisibility(View.GONE);
+            mNoNetworkView.setVisibility(View.VISIBLE);
         }
-
     }
 
     public void showRecipeMasterFragment(){
