@@ -2,6 +2,8 @@ package com.example.suzanne.recipesapp;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.drawable.GradientDrawable;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,6 +61,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
     private int mCurrentOrientation;
     private long mSavedVideoPosition;
+    private boolean mTwoPaneMode;
 
     private RecipeStep mRecipeStep;
     private ExoPlayer mExoPlayer;
@@ -93,13 +96,21 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         ButterKnife.bind(this, rootView);
+
         mCurrentOrientation = getResources().getConfiguration().orientation;
+        if (mCurrentOrientation == Configuration.ORIENTATION_LANDSCAPE && (mStepDescription != null)){
+            mTwoPaneMode = true;
+
+        }else {
+            mTwoPaneMode = false;
+        }
+
         initializeMediaSession();
         Bundle bundle = this.getArguments();
         if (bundle != null){
             mRecipeStep = bundle.getParcelable(RECIPE_STEP_DETAIL_KEY);
 
-            if(mCurrentOrientation == Configuration.ORIENTATION_PORTRAIT){
+            if(mCurrentOrientation == Configuration.ORIENTATION_PORTRAIT || mTwoPaneMode){
                 mStepDescription.setText(mRecipeStep.getDescription());
                 updateArrows(bundle);
             }

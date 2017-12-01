@@ -8,11 +8,14 @@ import android.util.Log;
 import com.example.suzanne.recipesapp.models.Recipe;
 import com.example.suzanne.recipesapp.models.RecipeStep;
 
-public class RecipeActivity extends AppCompatActivity implements MasterRecipeDetailFragment.OnRecipeStepClickListener {
+public class RecipeActivity extends AppCompatActivity implements MasterRecipeDetailFragment.OnRecipeStepClickListener, StepDetailFragment.OnStepArrowClickListener {
 
     private static final String RECIPE_ACTIVITY_EXTRA_KEY = "recipe";
     private static final String CURRENT_RECIPE_KEY = "currentRecipe";
     private static final String CURRENT_RECIPE_STEP_KEY = "recipeStep";
+    private static final String RECIPE_STEP_DETAIL_KEY = "recipeStepDetail";
+    private static final String IS_LAST_STEP_KEY = "isLastStep";
+    private static final String IS_FIRST_STEP_KEY = "isFirstStep";
     private Recipe mRecipe;
     private int mCurrentStepIndex;
     private boolean mTwoPaneMode;
@@ -35,7 +38,20 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
 
         if(findViewById(R.id.recipe_horiztonal_layout) != null){
             mTwoPaneMode = true;
-//            TODO - create the second fragment
+            bundle.putParcelable(RECIPE_STEP_DETAIL_KEY, mRecipe.getSteps()[mCurrentStepIndex]);
+            if(mRecipe.getSteps().length - 1 == mCurrentStepIndex){
+                bundle.putBoolean(IS_LAST_STEP_KEY, true);
+            } else {
+                bundle.putBoolean(IS_LAST_STEP_KEY, false);
+            }
+            bundle.putBoolean(IS_FIRST_STEP_KEY, (mCurrentStepIndex == 0));
+            if(savedInstanceState == null){
+                StepDetailFragment stepDetailFragment = new StepDetailFragment();
+                stepDetailFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.step_detail_fragment_container, stepDetailFragment)
+                        .commit();
+            }
         } else {
             mTwoPaneMode = false;
         }
@@ -56,5 +72,10 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
         Intent intent = new Intent(this, StepDetailActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onStepArrowClicked(String flag) {
+
     }
 }
