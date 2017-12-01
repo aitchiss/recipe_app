@@ -1,5 +1,6 @@
 package com.example.suzanne.recipesapp;
 
+import android.content.Context;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.suzanne.recipesapp.models.RecipeStep;
@@ -45,17 +47,30 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
     private static final String RECIPE_STEP_DETAIL_KEY = "recipeStepDetail";
     private static final String MEDIA_SESSION_TAG = "recipeMediaSession";
+    private static final String IS_LAST_STEP_KEY = "isLastStep";
+    private static final String IS_FIRST_STEP_KEY = "isFirstStep";
 
     private RecipeStep mRecipeStep;
     private ExoPlayer mExoPlayer;
     private MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
 
+    private OnNextStepClickListener mNextClickListener;
+
+    public interface OnNextStepClickListener{
+        void onNextStepClicked(View view);
+    }
+
     @BindView(R.id.tv_step_description)
     TextView mStepDescription;
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView mPlayerView;
+
+    @BindView(R.id.iv_next_arrow)
+    ImageView mNextArrow;
+
+    @BindView(R.id.tv_next_label) TextView mNextLabel;
 
     @Nullable
     @Override
@@ -67,14 +82,32 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         if (bundle != null){
             mRecipeStep = bundle.getParcelable(RECIPE_STEP_DETAIL_KEY);
             mStepDescription.setText(mRecipeStep.getDescription());
+            mNextArrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mNextClickListener.onNextStepClicked(view);
+                }
+            });
 
+            if(bundle.getBoolean(IS_LAST_STEP_KEY)){
+                mNextArrow.setVisibility(View.INVISIBLE);
+                mNextLabel.setVisibility(View.INVISIBLE);
+            }
             initializePlayer();
-
         }
 
         return rootView;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mNextClickListener = (OnNextStepClickListener) context;
+        } catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnNextStepClickListener");
+        }
+    }
 
     private void initializePlayer(){
         if (mExoPlayer == null){
@@ -114,6 +147,10 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         mMediaSession.setPlaybackState(mStateBuilder.build());
         mMediaSession.setCallback(new MySessionCallback());
         mMediaSession.setActive(true);
+    }
+
+    private void onNextClick(View view){
+
     }
 
     @Override
