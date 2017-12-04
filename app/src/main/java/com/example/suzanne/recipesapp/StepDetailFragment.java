@@ -238,8 +238,10 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     @Override
     public void onPause() {
         super.onPause();
-        mSavedVideoPosition = mExoPlayer.getCurrentPosition();
-        releasePlayer();
+        if(mExoPlayer != null){
+            mSavedVideoPosition = mExoPlayer.getCurrentPosition();
+            releasePlayer();
+        }
         mMediaSession.setActive(false);
     }
 

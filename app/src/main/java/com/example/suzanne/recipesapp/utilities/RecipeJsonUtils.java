@@ -104,15 +104,4 @@ public class RecipeJsonUtils {
         return recipeSteps;
     }
 
-//    public static String convertObjectArrayToJsonString(IngredientSpecification[] ingredients){
-//        Gson gson = new Gson();
-//        String json = gson.toJson(ingredients);
-//        return json;
-//    }
-//
-//    public static String convertObjectArrayToJsonString(RecipeStep[] steps){
-//        Gson gson = new Gson();
-//        String json = gson.toJson(steps);
-//        return json;
-//    }
 }

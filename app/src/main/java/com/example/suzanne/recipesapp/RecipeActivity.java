@@ -16,6 +16,8 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
     private static final String RECIPE_STEP_DETAIL_KEY = "recipeStepDetail";
     private static final String IS_LAST_STEP_KEY = "isLastStep";
     private static final String IS_FIRST_STEP_KEY = "isFirstStep";
+    private static final String FLAG_NEXT = "next";
+    private static final String FLAG_PREVIOUS = "previous";
     private Recipe mRecipe;
     private int mCurrentStepIndex;
     private boolean mTwoPaneMode;
@@ -38,6 +40,7 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
 
         if(findViewById(R.id.recipe_horiztonal_layout) != null){
             mTwoPaneMode = true;
+
             bundle.putParcelable(RECIPE_STEP_DETAIL_KEY, mRecipe.getSteps()[mCurrentStepIndex]);
             if(mRecipe.getSteps().length - 1 == mCurrentStepIndex){
                 bundle.putBoolean(IS_LAST_STEP_KEY, true);
@@ -67,15 +70,45 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
         Bundle bundle = new Bundle();
         bundle.putParcelable(CURRENT_RECIPE_KEY, mRecipe);
         bundle.putInt(CURRENT_RECIPE_STEP_KEY, mCurrentStepIndex);
-
-//        TODO LAUNCH THE STEP DETAIL ACTIVITY
-        Intent intent = new Intent(this, StepDetailActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if (mTwoPaneMode){
+            bundle.putParcelable(RECIPE_STEP_DETAIL_KEY, mRecipe.getSteps()[mCurrentStepIndex]);
+            if(mRecipe.getSteps().length - 1 == mCurrentStepIndex){
+                bundle.putBoolean(IS_LAST_STEP_KEY, true);
+            } else {
+                bundle.putBoolean(IS_LAST_STEP_KEY, false);
+            }
+            bundle.putBoolean(IS_FIRST_STEP_KEY, (mCurrentStepIndex == 0));
+            updateStepDetailFragment(bundle);
+        }else {
+            Intent intent = new Intent(this, StepDetailActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     @Override
     public void onStepArrowClicked(String flag) {
+        Bundle bundle = new Bundle();
+        if(flag.equals(FLAG_PREVIOUS) && mTwoPaneMode){
+            mCurrentStepIndex--;
+        } else if (flag.equals(FLAG_NEXT)){
+            mCurrentStepIndex++;
+        }
+        bundle.putParcelable(RECIPE_STEP_DETAIL_KEY, mRecipe.getSteps()[mCurrentStepIndex]);
+        if(mRecipe.getSteps().length - 1 == mCurrentStepIndex){
+            bundle.putBoolean(IS_LAST_STEP_KEY, true);
+        } else {
+            bundle.putBoolean(IS_LAST_STEP_KEY, false);
+        }
+        bundle.putBoolean(IS_FIRST_STEP_KEY, (mCurrentStepIndex == 0));
+        updateStepDetailFragment(bundle);
+    }
 
+    private void updateStepDetailFragment(Bundle bundle){
+        StepDetailFragment stepDetailFragment = new StepDetailFragment();
+        stepDetailFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.step_detail_fragment_container, stepDetailFragment)
+                .commit();
     }
 }

@@ -71,7 +71,6 @@ public class MasterRecipeDetailFragment extends Fragment {
         super.onAttach(context);
         try {
             mRecipeStepClickListener = (OnRecipeStepClickListener) context;
-            Log.d("frag", "set handler");
         } catch (ClassCastException e){
             throw new ClassCastException(context.toString() + " must implement OnRecipeStepClickListener");
         }
