@@ -59,8 +59,6 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
             mTwoPaneMode = false;
         }
 
-
-
         getSupportActionBar().setTitle(mRecipe.getName());
     }
 

@@ -8,4 +8,5 @@
     <color name="colorCardBackground">#F5F5F6</color>
     <color name="colorListBackground">#E1E2E1</color>
     <color name="colorNoNetworkBackground">#bdbdbd</color>
+    <color name="colorPrimaryTextColor">#000000</color>
 </resources>

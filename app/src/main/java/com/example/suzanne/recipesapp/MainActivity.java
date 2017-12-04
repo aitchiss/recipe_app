@@ -1,5 +1,6 @@
 package com.example.suzanne.recipesapp;
 
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.example.suzanne.recipesapp.models.Recipe;
 import com.example.suzanne.recipesapp.utilities.RecipeJsonUtils;
+import com.google.gson.Gson;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int RECIPES_LOADER_ID = 10;
     private static final String RECIPES_PARCEL_KEY = "recipes";
     private static final String RECIPES_SHARED_PREF_KEY = "recipeList";
+    private static final String RECIPES_SHARED_PREF = "recipePrefs";
+    private static final String RECIPES_FULL_LIST_KEY = "recipesFullList";
+    private static final String CURRENT_WIDGET_RECIPE_KEY = "currentRecipe";
     private ArrayList<Recipe> mRecipes;
 
     @BindView(R.id.layout_main_activity_no_network)
@@ -39,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+//        TODO - store latest list of recipes into shared preferences each time so widget can use
 
         if (savedInstanceState != null && savedInstanceState.containsKey(RECIPES_SHARED_PREF_KEY)){
             mRecipes = savedInstanceState.getParcelableArrayList(RECIPES_SHARED_PREF_KEY);
@@ -76,6 +83,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.master_recipe_list_fragment, masterRecipeListFragment)
                 .commitAllowingStateLoss();
+    }
+
+    private void storeIngredientsInSharedPrefs(){
+//        Store ingredients lists on each network call, to be used in app widget
+        Gson gson = new Gson();
+        String recipes = gson.toJson(mRecipes);
+        SharedPreferences sharedPreferences = getSharedPreferences(RECIPES_SHARED_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(RECIPES_FULL_LIST_KEY, recipes);
+        editor.commit();
+
+        if(!sharedPreferences.contains(CURRENT_WIDGET_RECIPE_KEY)){
+//            If there is no recipe selected in the widget, select the first one
+            editor.putInt(CURRENT_WIDGET_RECIPE_KEY, 0);
+            editor.commit();
+        }
     }
 
     @Override
@@ -117,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (data != null){
             mRecipes = data;
             showRecipeMasterFragment();
+            storeIngredientsInSharedPrefs();
         }
     }
 

@@ -69,7 +69,6 @@ public class StepDescriptionAdapter extends RecyclerView.Adapter<StepDescription
 
         @Override
         public void onClick(View view) {
-            Log.d("clicked", "in adapter");
             mClickHandler.onRecipeStepClick(getAdapterPosition());
         }
     }

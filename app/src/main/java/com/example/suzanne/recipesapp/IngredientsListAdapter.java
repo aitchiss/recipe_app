@@ -41,9 +41,7 @@ public class IngredientsListAdapter extends RecyclerView.Adapter<IngredientsList
         String quantityString;
         boolean quantityIsWholeNumber = doubleIsWholeNumber(mIngredients[position].getQuantity());
         if (quantityIsWholeNumber){
-
             quantityString = String.valueOf(Integer.valueOf((int) Math.round(mIngredients[position].getQuantity())));
-            Log.d("string", quantityString);
         } else {
             quantityString = String.valueOf(mIngredients[position].getQuantity());
         }
