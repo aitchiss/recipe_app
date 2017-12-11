@@ -29,6 +29,8 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
+        Intent listViewIntent = new Intent(context, ListViewWidgetService.class);
+        views.setRemoteAdapter(R.id.lv_widget_ingredients, listViewIntent);
 
 //        Get the latest recipes list from shared prefs, and set the content to the first recipe
         SharedPreferences preferences = context.getSharedPreferences(RECIPES_SHARED_PREF, Context.MODE_PRIVATE);
