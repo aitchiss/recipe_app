@@ -35,7 +35,6 @@ public class NetworkUtils {
 
 
     public static URL buildUrl(){
-//        TODO - is this necessary?
         Uri builtUri = Uri.parse(API_URL);
         URL url = null;
         try {
@@ -57,7 +56,6 @@ public class NetworkUtils {
             if (hasInput){
                 return scanner.next();
             } else {
-                Log.d("network util", "probs getting data");
                 return null;
             }
         } finally {

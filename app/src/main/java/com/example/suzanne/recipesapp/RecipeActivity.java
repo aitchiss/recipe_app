@@ -28,7 +28,6 @@ public class RecipeActivity extends AppCompatActivity implements MasterRecipeDet
         setContentView(R.layout.activity_recipe);
 
         mRecipe = getIntent().getParcelableExtra(RECIPE_ACTIVITY_EXTRA_KEY);
-
         Bundle bundle = new Bundle();
         bundle.putParcelable(RECIPE_ACTIVITY_EXTRA_KEY, mRecipe);
 

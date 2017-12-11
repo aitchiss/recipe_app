@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String RECIPES_SHARED_PREF_KEY = "recipeList";
     private static final String RECIPES_SHARED_PREF = "recipePrefs";
     private static final String RECIPES_FULL_LIST_KEY = "recipesFullList";
-    private static final String CURRENT_WIDGET_RECIPE_KEY = "currentRecipe";
     private ArrayList<Recipe> mRecipes;
     private RecipeIdlingResource mIdlingResource;
 
