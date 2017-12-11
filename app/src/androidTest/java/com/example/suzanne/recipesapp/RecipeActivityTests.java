@@ -10,6 +10,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.RecyclerView;
 
 import com.example.suzanne.recipesapp.models.IngredientSpecification;
 import com.example.suzanne.recipesapp.models.MeasurementType;
@@ -46,7 +47,6 @@ public class RecipeActivityTests {
     @Rule
     public ActivityTestRule<RecipeActivity> mActivityTestRule = new ActivityTestRule<RecipeActivity>(RecipeActivity.class, false, false);
 
-    private IdlingResource mIdlingResource;
 
     private Recipe mTestRecipe;
 
@@ -82,12 +82,12 @@ public class RecipeActivityTests {
                 withText(mTestRecipe.getName())));
     }
 
-    @After
-    public void unregisterIdlingResource(){
-        if (mIdlingResource != null){
-            IdlingRegistry.getInstance().unregister(mIdlingResource);
-        }
+    @Test
+    public void stepDescriptionShownCorrectly() {
+        onView(withId(R.id.tv_step_short_description))
+                .check(matches(withText(mTestRecipe.getSteps()[0].getShortDescription())));
     }
 
+    
 
 }
