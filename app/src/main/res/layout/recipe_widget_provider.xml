@@ -2,24 +2,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/widget_provider_linear_layout"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorListBackground"
     android:padding="@dimen/widget_margin">
 
-    <TextView
-        android:id="@+id/tv_widget_recipe_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:padding="10dp"
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:background="@color/colorPrimaryDark"
-        android:contentDescription="@string/appwidget_text"
-        tools:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/widget_back_button"
+            android:layout_gravity="start|center_vertical"
+            android:tint="@color/colorAccent"
+            android:src="@drawable/ic_back_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:id="@+id/tv_widget_recipe_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:padding="10dp"
+            android:contentDescription="@string/appwidget_text"
+            tools:text="@string/appwidget_text"
+            android:textColor="#ffffff"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/widget_next_arrow"
+            android:layout_gravity="end|center_vertical"
+            android:src="@drawable/ic_next_arrow"
+            android:tint="@color/colorAccent"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+    </LinearLayout>
 
 
     <ListView

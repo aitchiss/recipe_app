@@ -47,14 +47,12 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
     @Override
     public void onDataSetChanged() {
 //        Get the last updated list of recipes
-        Log.d("widget service", "on data set changed");
         SharedPreferences preferences = mContext.getSharedPreferences(RECIPES_SHARED_PREF, Context.MODE_PRIVATE);
         String recipesJson = preferences.getString(RECIPES_FULL_LIST_KEY, "");
         Gson gson = new Gson();
         Recipe[] recipes = gson.fromJson(recipesJson, Recipe[].class);
         int currentRecipeIndex = preferences.getInt(CURRENT_WIDGET_RECIPE_KEY, 0);
         mIngredients = recipes[currentRecipeIndex].getIngredients();
-        Log.d("widget service", String.valueOf(mIngredients.length));
     }
 
     @Override
@@ -121,7 +119,6 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
         ingredientString += " ";
         ingredientString += ingredientName;
         views.setTextViewText(R.id.tv_widget_ingredient_list_item, ingredientString);
-        Log.d("widget service", ingredientString);
         return views;
     }
 
