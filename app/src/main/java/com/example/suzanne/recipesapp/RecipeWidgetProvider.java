@@ -59,16 +59,24 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
             views.setViewVisibility(R.id.widget_back_button, View.VISIBLE);
         }
 
-        views.setTextViewText(R.id.tv_widget_recipe_title, recipes[currentRecipeIndex].getName());
-//        Update the listview
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_widget_ingredients);
-
-
-        Intent intent = new Intent(context, RecipeActivity.class);
-        intent.putExtra(RECIPE_ACTIVITY_EXTRA_KEY, recipes[currentRecipeIndex]);
-        Log.d("widget provider", recipes[currentRecipeIndex].getName());
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setOnClickPendingIntent(R.id.tv_widget_recipe_title, pendingIntent);
+        if(recipes.length != 0){
+            views.setTextViewText(R.id.tv_widget_recipe_title, recipes[currentRecipeIndex].getName());
+            views.setViewVisibility(R.id.tv_widget_empty_state, View.INVISIBLE);
+//        Update the listview only if there are ingredients to show
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_widget_ingredients);
+            Intent intent = new Intent(context, RecipeActivity.class);
+            intent.putExtra(RECIPE_ACTIVITY_EXTRA_KEY, recipes[currentRecipeIndex]);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setOnClickPendingIntent(R.id.widget_provider_linear_layout, pendingIntent);
+            views.setPendingIntentTemplate(R.id.lv_widget_ingredients, pendingIntent);
+        } else {
+//            show an empty state if widget has no recupes to show
+            views.setTextViewText(R.id.tv_widget_recipe_title, "Recipes App");
+            views.setViewVisibility(R.id.tv_widget_empty_state, View.VISIBLE);
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setOnClickPendingIntent(R.id.widget_provider_linear_layout, pendingIntent);
+        }
 
 
         // Instruct the widget manager to update the widget

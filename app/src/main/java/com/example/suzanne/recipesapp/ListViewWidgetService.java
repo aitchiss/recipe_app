@@ -119,6 +119,9 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
         ingredientString += " ";
         ingredientString += ingredientName;
         views.setTextViewText(R.id.tv_widget_ingredient_list_item, ingredientString);
+
+        Intent fillInIntent = new Intent();
+        views.setOnClickFillInIntent(R.id.tv_widget_ingredient_list_item, fillInIntent);
         return views;
     }
 
