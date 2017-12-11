@@ -88,6 +88,13 @@ public class RecipeActivityTests {
                 .check(matches(withText(mTestRecipe.getSteps()[0].getShortDescription())));
     }
 
-    
+    @Test
+    public void testClickingRecipeStepShowsStepDetail(){
+        onView(withId(R.id.step_desc_recycler_view))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0,
+                        click()));
+        onView(withId(R.id.tv_step_description))
+                .check(matches(withText(mTestRecipe.getSteps()[0].getDescription())));
+    }
 
 }
