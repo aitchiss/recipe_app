@@ -28,6 +28,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     private static final String CURRENT_WIDGET_RECIPE_KEY = "currentRecipe";
     private static final String ON_NEXT_CLICK_TAG = "nextClick";
     private static final String ON_BACK_CLICK_TAG = "backClick";
+    private static final String RECIPE_ACTIVITY_EXTRA_KEY = "recipe";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -63,8 +64,10 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_widget_ingredients);
 
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        Intent intent = new Intent(context, RecipeActivity.class);
+        intent.putExtra(RECIPE_ACTIVITY_EXTRA_KEY, recipes[currentRecipeIndex]);
+        Log.d("widget provider", recipes[currentRecipeIndex].getName());
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.tv_widget_recipe_title, pendingIntent);
 
 

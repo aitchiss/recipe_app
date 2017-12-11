@@ -47,7 +47,6 @@ public class MasterRecipeListFragment extends Fragment implements MasterRecipeLi
 
         if (bundle != null){
             mRecipes = bundle.getParcelableArrayList(RECIPES_PARCEL_KEY);
-            Log.d("recipe test: ", mRecipes.get(0).getSteps()[0].getShortDescription());
         } else {
             mRecipes = new ArrayList<Recipe>();
         }

@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-//        TODO - store latest list of recipes into shared preferences each time so widget can use
-
         if (savedInstanceState != null && savedInstanceState.containsKey(RECIPES_SHARED_PREF_KEY)){
             mRecipes = savedInstanceState.getParcelableArrayList(RECIPES_SHARED_PREF_KEY);
             mFragmentContainer.setVisibility(View.VISIBLE);
@@ -85,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 .commitAllowingStateLoss();
     }
 
-    private void storeIngredientsInSharedPrefs(){
-//        Store ingredients lists on each network call, to be used in app widget
+    private void storeRecipesInSharedPrefs(){
+//        Store recipes on each network call, to be used in app widget
         Gson gson = new Gson();
         String recipes = gson.toJson(mRecipes);
         SharedPreferences sharedPreferences = getSharedPreferences(RECIPES_SHARED_PREF, MODE_PRIVATE);
@@ -94,11 +92,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         editor.putString(RECIPES_FULL_LIST_KEY, recipes);
         editor.commit();
 
-        if(!sharedPreferences.contains(CURRENT_WIDGET_RECIPE_KEY)){
-//            If there is no recipe selected in the widget, select the first one
-            editor.putInt(CURRENT_WIDGET_RECIPE_KEY, 0);
-            editor.commit();
-        }
     }
 
     @Override
@@ -140,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (data != null){
             mRecipes = data;
             showRecipeMasterFragment();
-            storeIngredientsInSharedPrefs();
+            storeRecipesInSharedPrefs();
         }
     }
 
