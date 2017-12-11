@@ -57,6 +57,7 @@ public class NetworkUtils {
             if (hasInput){
                 return scanner.next();
             } else {
+                Log.d("network util", "probs getting data");
                 return null;
             }
         } finally {

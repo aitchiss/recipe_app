@@ -3,6 +3,9 @@ package com.example.suzanne.recipesapp;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.example.suzanne.recipesapp.IdlingResource.RecipeIdlingResource;
 import com.example.suzanne.recipesapp.models.Recipe;
 import com.example.suzanne.recipesapp.utilities.RecipeJsonUtils;
 import com.google.gson.Gson;
@@ -32,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String RECIPES_FULL_LIST_KEY = "recipesFullList";
     private static final String CURRENT_WIDGET_RECIPE_KEY = "currentRecipe";
     private ArrayList<Recipe> mRecipes;
+    private RecipeIdlingResource mIdlingResource;
+
+
 
     @BindView(R.id.layout_main_activity_no_network)
     LinearLayout mNoNetworkView;
@@ -45,18 +52,34 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mIdlingResource = new RecipeIdlingResource();
+        mIdlingResource.setIdleState(false);
+
+
         if (savedInstanceState != null && savedInstanceState.containsKey(RECIPES_SHARED_PREF_KEY)){
             mRecipes = savedInstanceState.getParcelableArrayList(RECIPES_SHARED_PREF_KEY);
             mFragmentContainer.setVisibility(View.VISIBLE);
             mNoNetworkView.setVisibility(View.INVISIBLE);
             showRecipeMasterFragment();
+            mIdlingResource.setIdleState(true);
+            Log.d("set idle state", "true");
         } else {
             loadRecipes();
         }
     }
 
+    @VisibleForTesting
+    @NonNull
+    public RecipeIdlingResource getRecipeIdlingResource(){
+        if (mIdlingResource == null){
+            mIdlingResource = new RecipeIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
     public void loadRecipes(){
         if (NetworkUtils.isOnlineOrConnecting(this)){
+            Log.d("mainactivit", "loading recipes");
             mFragmentContainer.setVisibility(View.VISIBLE);
             mNoNetworkView.setVisibility(View.INVISIBLE);
             LoaderManager loaderManager = getSupportLoaderManager();
@@ -108,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             protected void onStartLoading() {
+                Log.d("main activity", "started loading");
                 super.onStartLoading();
                 forceLoad();
             }
@@ -119,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 try {
                     String results = NetworkUtils.getResponseFromHttpUrl(url);
                     recipeData = RecipeJsonUtils.convertJsonToRecipes(results);
+                    Log.d("main activty", "recipe data recvd");
                 } catch (Exception e){
                     e.printStackTrace();
                     recipeData = null;
@@ -131,9 +156,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<ArrayList<Recipe>> loader, ArrayList<Recipe> data) {
         if (data != null){
+            Log.d("main activty", "on load finished");
             mRecipes = data;
             showRecipeMasterFragment();
             storeRecipesInSharedPrefs();
+            mIdlingResource.setIdleState(true);
         }
     }
 
