@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,7 +63,6 @@ public class MasterRecipeDetailFragment extends Fragment {
             mStepsRecyclerView.setAdapter(stepDescriptionAdapter);
 
         }
-
         return rootView;
     }
 
@@ -75,4 +75,5 @@ public class MasterRecipeDetailFragment extends Fragment {
             throw new ClassCastException(context.toString() + " must implement OnRecipeStepClickListener");
         }
     }
+
 }

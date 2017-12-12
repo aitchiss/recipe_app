@@ -27,6 +27,7 @@ public class MasterRecipeListFragment extends Fragment implements MasterRecipeLi
     MasterRecipeListAdapter masterRecipeListAdapter;
     private static final String RECIPES_PARCEL_KEY = "recipes";
     private static final String RECIPE_ACTIVITY_EXTRA_KEY = "recipe";
+    private static final String LIST_STATE_KEY = "listState";
     ArrayList<Recipe> mRecipes;
 
     @BindView(R.id.recipes_recycler_view)
@@ -61,5 +62,21 @@ public class MasterRecipeListFragment extends Fragment implements MasterRecipeLi
         Intent intent = new Intent(getActivity(), RecipeActivity.class);
         intent.putExtra(RECIPE_ACTIVITY_EXTRA_KEY, recipe);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        int scrollPosition = mRecyclerView.getVerticalScrollbarPosition();
+        outState.putInt(LIST_STATE_KEY, scrollPosition);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null && savedInstanceState.containsKey(LIST_STATE_KEY)){
+            int listPosition = savedInstanceState.getInt(LIST_STATE_KEY);
+            mRecyclerView.setVerticalScrollbarPosition(listPosition);
+        }
     }
 }
