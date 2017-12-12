@@ -28,6 +28,7 @@ public class MasterRecipeDetailFragment extends Fragment {
     private static final String RECIPE_ACTIVITY_EXTRA_KEY = "recipe";
     private Recipe mRecipe;
     private OnRecipeStepClickListener mRecipeStepClickListener;
+    private static final String STEPS_SCROLL_STATE_KEY = "scrollState";
 
     public interface OnRecipeStepClickListener{
         void onRecipeStepClick(int stepIndex);
@@ -38,6 +39,11 @@ public class MasterRecipeDetailFragment extends Fragment {
 
     @BindView(R.id.step_desc_recycler_view)
     RecyclerView mStepsRecyclerView;
+
+    @BindView(R.id.nested_scroll_view_recipe_detail)
+    NestedScrollView mNestedScrollView;
+
+    private int mScrollPosition;
 
     public MasterRecipeDetailFragment(){
 
@@ -62,6 +68,13 @@ public class MasterRecipeDetailFragment extends Fragment {
             StepDescriptionAdapter stepDescriptionAdapter = new StepDescriptionAdapter(mRecipe.getSteps(), mRecipeStepClickListener);
             mStepsRecyclerView.setAdapter(stepDescriptionAdapter);
 
+            mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    mScrollPosition = scrollY;
+                }
+            });
+
         }
         return rootView;
     }
@@ -76,4 +89,17 @@ public class MasterRecipeDetailFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        if(savedInstanceState != null && savedInstanceState.containsKey(STEPS_SCROLL_STATE_KEY)){
+            mNestedScrollView.setVerticalScrollbarPosition(savedInstanceState.getInt(STEPS_SCROLL_STATE_KEY));
+        }
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STEPS_SCROLL_STATE_KEY, mScrollPosition);
+        super.onSaveInstanceState(outState);
+    }
 }
