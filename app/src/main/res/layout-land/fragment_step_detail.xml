@@ -36,7 +36,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:textAlignment="center"
-            android:text="Connect to the internet to view recipe step video and image instructions"
+            android:text="@string/connect_for_video_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

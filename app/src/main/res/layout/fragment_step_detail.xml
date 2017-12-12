@@ -40,8 +40,7 @@
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toStartOf="@+id/iv_next_arrow"
         app:layout_constraintStart_toEndOf="@+id/iv_back_arrow"
-        app:layout_constraintTop_toBottomOf="@+id/player_view"
-        tools:text="step description ihkh dslhk djklshlksdhg laskdhg lsglhdjgh gh lasf hl hjlds gsdg" />
+        app:layout_constraintTop_toBottomOf="@+id/player_view" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -77,7 +76,7 @@
         android:id="@+id/tv_previous_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Previous"
+        android:text="@string/previous_label"
         app:layout_constraintEnd_toEndOf="@+id/iv_back_arrow"
         app:layout_constraintStart_toStartOf="@+id/iv_back_arrow"
         app:layout_constraintTop_toBottomOf="@+id/iv_back_arrow" />
@@ -86,7 +85,7 @@
         android:id="@+id/tv_next_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text="@string/next_label"
         app:layout_constraintEnd_toEndOf="@+id/iv_next_arrow"
         app:layout_constraintStart_toStartOf="@+id/iv_next_arrow"
         app:layout_constraintTop_toTopOf="@+id/tv_previous_label" />
@@ -120,7 +119,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:textAlignment="center"
-            android:text="Connect to the internet to view recipe step video and image instructions"
+            android:text="@string/connect_for_video_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

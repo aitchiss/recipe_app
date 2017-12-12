@@ -20,8 +20,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_recipe_image"
-        tools:text="Recipe Name" />
+        app:layout_constraintTop_toTopOf="@+id/iv_recipe_image"/>
 
     <TextView
         android:id="@+id/tv_servings_label"
@@ -29,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Serves: "
+        android:text="@string/serves_label"
         app:layout_constraintBottom_toBottomOf="@+id/iv_recipe_image"
         app:layout_constraintStart_toStartOf="@+id/tv_recipe_name"
         app:layout_constraintVertical_bias="1.0" />
@@ -40,8 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_servings_label"
-        app:layout_constraintStart_toEndOf="@+id/tv_servings_label"
-        tools:text="5" />
+        app:layout_constraintStart_toEndOf="@+id/tv_servings_label" />
 
     <ImageView
         android:id="@+id/iv_recipe_image"

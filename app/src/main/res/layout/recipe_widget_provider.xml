@@ -3,7 +3,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/widget_provider_linear_layout"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorListBackground"
     android:padding="@dimen/widget_margin">
 
@@ -29,7 +28,6 @@
             android:layout_centerVertical="true"
             android:layout_margin="8dp"
             android:padding="10dp"
-            tools:text="@string/appwidget_text"
             android:textColor="#ffffff"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -56,7 +54,7 @@
         android:id="@+id/tv_widget_empty_state"
         android:visibility="invisible"
         android:textAlignment="center"
-        android:text="No recipes to show. Please launch the app to get started"
+        android:text="@string/widget_empty_state_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
