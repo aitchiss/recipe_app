@@ -15,6 +15,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/widget_back_button"
+            android:contentDescription="@string/previous_content_desc"
             android:layout_gravity="start|center_vertical"
             android:tint="@color/colorAccent"
             android:src="@drawable/ic_back_arrow"
@@ -34,6 +35,7 @@
 
         <ImageView
             android:id="@+id/widget_next_arrow"
+            android:contentDescription="@string/next_content_desc"
             android:layout_gravity="end|center_vertical"
             android:src="@drawable/ic_next_arrow"
             android:tint="@color/colorAccent"

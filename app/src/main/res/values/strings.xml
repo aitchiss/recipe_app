@@ -9,4 +9,13 @@
     <string name="connect_for_video_label">Connect to the internet to view recipe step video and image instructions</string>
     <string name="serves_label">Serves\u003A </string>
     <string name="widget_empty_state_text">No recipes to show. Please launch the app to get started</string>
+    <string name="wifi_content_desc">Wifi not connected</string>
+    <string name="play_content_desc">Play button</string>
+    <string name="pause_content_desc">Pause button</string>
+    <string name="video_content_desc">Video instructions</string>
+    <string name="no_video_content_desc">No video available for this step</string>
+    <string name="next_content_desc">Next button</string>
+    <string name="previous_content_desc">Previous button</string>
+    <string name="recipe_image_content_desc">Recipe photo</string>
+    <string name="see_details_content_desc">Tap card for step details</string>
 </resources>

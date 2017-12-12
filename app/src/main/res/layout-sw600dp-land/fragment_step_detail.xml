@@ -22,6 +22,7 @@
 
     <ImageView
         android:id="@+id/iv_video_alt_image"
+        android:contentDescription="@string/no_video_content_desc"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginBottom="8dp"
@@ -54,6 +55,7 @@
 
     <ImageView
         android:id="@+id/iv_next_arrow"
+        android:contentDescription="@string/next_content_desc"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="16dp"
@@ -66,6 +68,7 @@
 
     <ImageView
         android:id="@+id/iv_back_arrow"
+        android:contentDescription="@string/previous_content_desc"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -116,6 +119,7 @@
 
         <ImageView
             android:src="@drawable/ic_wifi"
+            android:contentDescription="@string/wifi_content_desc"
             android:tint="@color/colorCardBackground"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"

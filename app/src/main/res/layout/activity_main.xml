@@ -24,6 +24,7 @@
 
         <ImageView
             android:src="@drawable/ic_wifi"
+            android:contentDescription="@string/wifi_content_desc"
             android:layout_gravity="center_vertical|center_horizontal"
             android:tint="@color/colorCardBackground"
             android:layout_marginBottom="50dp"

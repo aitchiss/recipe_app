@@ -15,10 +15,12 @@
 
         <ImageButton
             android:id="@id/exo_play"
+            android:contentDescription="@string/play_content_desc"
             style="@style/ExoMediaButton.Play"/>
 
         <ImageButton
             android:id="@id/exo_pause"
+            android:contentDescription="@string/pause_content_desc"
             style="@style/ExoMediaButton.Pause"/>
 
     </LinearLayout>

@@ -13,6 +13,7 @@
 
     <ImageView
         android:id="@+id/iv_video_alt_image"
+        android:contentDescription="@string/no_video_content_desc"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -25,6 +26,7 @@
 
         <ImageView
             android:src="@drawable/ic_wifi"
+            android:contentDescription="@string/wifi_content_desc"
             android:tint="@color/colorCardBackground"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
