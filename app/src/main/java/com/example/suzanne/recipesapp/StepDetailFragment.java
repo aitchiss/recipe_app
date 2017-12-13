@@ -219,6 +219,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         }
     }
 
+
     private void initializeMediaSession(){
         mMediaSession = new MediaSessionCompat(getActivity(), MEDIA_SESSION_TAG);
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
@@ -243,6 +244,14 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
             releasePlayer();
         }
         mMediaSession.setActive(false);
+    }
+
+    @Override
+    public void onResume() {
+        Bundle bundle = new Bundle();
+        bundle.putLong(CURRENT_PLAYER_POSITION_KEY, mSavedVideoPosition);
+        initializePlayer(bundle);
+        super.onResume();
     }
 
     @Override
