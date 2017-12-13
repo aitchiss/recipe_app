@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mNoNetworkView.setVisibility(View.INVISIBLE);
             showRecipeMasterFragment();
             mIdlingResource.setIdleState(true);
-            Log.d("set idle state", "true");
         } else {
             loadRecipes();
         }
